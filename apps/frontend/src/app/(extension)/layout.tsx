@@ -46,6 +46,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
           disableImageCompression={!!process.env.DISABLE_IMAGE_COMPRESSION}
           disableXAnalytics={!!process.env.DISABLE_X_ANALYTICS}
           sentryDsn={process.env.NEXT_PUBLIC_SENTRY_DSN!}
+          maxUploadSizeMB={parseInt(process.env.NEXT_PUBLIC_MAX_UPLOAD_SIZE_MB || '10', 10)}
           transloadit={
             process.env.TRANSLOADIT_AUTH && process.env.TRANSLOADIT_TEMPLATE
               ? [
