@@ -35,8 +35,15 @@ export class CustomFileValidationPipe implements PipeTransform {
   }
 
   private getMaxSize(mimeType: string): number {
+    // Get upload size limit from environment variable (in MB), default to 10 for images
+    const uploadSizeLimitMB = parseInt(
+      process.env.MAX_UPLOAD_SIZE_MB || '10',
+      10
+    );
+    const uploadSizeLimit = uploadSizeLimitMB * 1024 * 1024;
+
     if (mimeType.startsWith('image/')) {
-      return 10 * 1024 * 1024; // 10 MB
+      return uploadSizeLimit;
     } else if (mimeType.startsWith('video/')) {
       return 1024 * 1024 * 1024; // 1 GB
     } else {

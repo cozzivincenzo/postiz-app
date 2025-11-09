@@ -69,6 +69,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
           disableXAnalytics={!!process.env.DISABLE_X_ANALYTICS}
           sentryDsn={process.env.NEXT_PUBLIC_SENTRY_DSN!}
           language={allHeaders.get(headerName)}
+          maxUploadSizeMB={parseInt(process.env.NEXT_PUBLIC_MAX_UPLOAD_SIZE_MB || '10', 10)}
           transloadit={
             process.env.TRANSLOADIT_AUTH && process.env.TRANSLOADIT_TEMPLATE
               ? [

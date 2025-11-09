@@ -24,6 +24,7 @@ interface VariableContextInterface {
   tolt: string;
   transloadit: string[];
   sentryDsn: string;
+  maxUploadSizeMB: number;
 }
 const VariableContext = createContext({
   billingEnabled: false,
@@ -47,6 +48,7 @@ const VariableContext = createContext({
   tolt: '',
   transloadit: [],
   sentryDsn: '',
+  maxUploadSizeMB: 10,
 } as VariableContextInterface);
 export const VariableContextComponent: FC<
   VariableContextInterface & {

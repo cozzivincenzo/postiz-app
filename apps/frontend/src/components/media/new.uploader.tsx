@@ -62,8 +62,13 @@ export function useUppyUploader(props: {
 }) {
   const setLocked = useLaunchStore((state) => state.setLocked);
   const toast = useToaster();
-  const { storageProvider, backendUrl, disableImageCompression, transloadit } =
-    useVariables();
+  const {
+    storageProvider,
+    backendUrl,
+    disableImageCompression,
+    transloadit,
+    maxUploadSizeMB,
+  } = useVariables();
   const { onUploadSuccess, allowedFileTypes } = props;
   const fetch = useFetch();
   return useMemo(() => {
@@ -137,17 +142,17 @@ export function useUppyUploader(props: {
             const isImage = file.type?.startsWith('image/');
             const isVideo = file.type?.startsWith('video/');
 
-            const maxImageSize = 30 * 1024 * 1024; // 30MB
+            const maxImageSize = maxUploadSizeMB * 1024 * 1024;
             const maxVideoSize = 1000 * 1024 * 1024; // 1GB
 
             if (isImage && file.size > maxImageSize) {
               const error = new Error(
-                `Image file "${file.name}" is too large. Maximum size allowed is 30MB.`
+                `Image file "${file.name}" is too large. Maximum size allowed is ${maxUploadSizeMB}MB.`
               );
               uppy2.log(error.message, 'error');
               uppy2.info(error.message, 'error', 5000);
               toast.show(
-                `Image file is too large. Maximum size allowed is 30MB.`
+                `Image file is too large. Maximum size allowed is ${maxUploadSizeMB}MB.`
               );
               uppy2.removeFile(file.id); // Remove file from queue
               return reject(error);
@@ -248,7 +253,18 @@ export function useUppyUploader(props: {
       });
     });
     return uppy2;
-  }, []);
+  }, [
+    maxUploadSizeMB,
+    storageProvider,
+    backendUrl,
+    disableImageCompression,
+    transloadit,
+    allowedFileTypes,
+    fetch,
+    onUploadSuccess,
+    setLocked,
+    toast,
+  ]);
 }
 export function MultipartFileUploaderAfter({
   onUploadSuccess,
